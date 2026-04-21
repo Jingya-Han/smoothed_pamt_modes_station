@@ -23,37 +23,45 @@
 % follwing variables as:
 % thelength=10; startyear=1980:5:1995; endyear=2014:-5:1999
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
 clc
-prfolder='/share/cliprelabs/jh2423/P1/data_process/ghcnd_pr/'; % the folder saved all initially read ghcnd data in mat format
-directory='/share/cliprelabs/observations/ghcnd_backup/ghcn_daily_data_20250418/ghcnd_all/';
+addpath('/share/cliprelabs/jh2423/smoothed_pamt_modes_station/functions/');
+prfolder='/share/cliprelabs/jh2423/smoothed_pamt_modes_station/data/ghcnd_pr/'; % the folder saved all initially read ghcnd data in mat format
+directory='/share/cliprelabs/observations/ghcnd_backup/ghcnd_all_20260129/ghcnd_all/';
 thelength=30; % epoch length
 missrate=20; % set acceptable miss rate 
-minglelistpath='/share/cliprelabs/observations/ghcnd_backup/ghcn_daily_data_20250418/mingle-list.txt';
-inventorypath='/share/cliprelabs/observations/ghcnd_backup/ghcn_daily_data_20250418/';
-fnames='/share/cliprelabs/observations/ghcnd_backup/ghcn_daily_data_20250418/ghcnd_all_fnames.txt'; % this is a file that we made
-ghcnstationsfile='/share/cliprelabs/observations/ghcnd_backup/ghcn_daily_data_20250418/ghcnd-stations.txt';
-
-for startyear=1955%:1964 % startyear: latest start year
-    for endyear=2024%:-1:2014 % endyear: earliest end year
-        if startyear+(thelength-1) < endyear+(thelength-1)
-          % dense_station_country: country id of data-dense countries
-          dense_station_country={'US','RS','AS','PO','SP','FR','UK','GM','NL','NO','SW',...
+minglelistpath='/share/cliprelabs/observations/ghcnd_backup/ghcnd_all_20260129/mingle-list.txt';
+inventorypath='/share/cliprelabs/observations/ghcnd_backup/ghcnd_all_20260129/';
+fnames='/share/cliprelabs/observations/ghcnd_backup/ghcnd_all_20260129/ghcnd_all_fnames.txt'; % this is a file that we made
+ghcnstationsfile='/share/cliprelabs/observations/ghcnd_backup/ghcnd_all_20260129/ghcnd-stations.txt';
+latestsy=1955;
+earliestey=2025;
+% dense_station_country: country id of data-dense countries
+dense_station_country={'US','RS','AS','PO','SP','FR','UK','GM','NL','NO','SW',...
     'EN','BO','IT','AU','RO','HU'}; 
     % US United States % RS Russia % AS Australia % PO Portugal % SP Spain % FR France
     % UK United kingdom % GM Germany  % NL Netherlands  % NO Norway % SW Sweden
     % EN Estonia % BO Belarus % IT Italy  % AU Austria  % RO Romania % HU Hungary
-    
-%     % read ghcnd stations measuring 'PRCP' and with start year <= startyear & end year >= endyear
-%     [ghcndprcp, pnz, ghcnids, ghcnlats, ghcnlons, years ] = load_ghcnd_prcp(startyear, endyear,...
-%         directory, prfolder,inventorypath, fnames);
-%     save ([prfolder,'reo_ghcnddailydata_',...
-%         num2str(startyear),num2str(endyear),'.mat'], ...
-%         'ghcndprcp', 'pnz', 'ghcnids', 'ghcnlats', 'ghcnlons', ...
-%         'years','-v7.3'); % save intermediate process data
-load([prfolder,'reo_ghcnddailydata_',...
-         num2str(startyear),num2str(endyear),'.mat']);
+% save latitudes and longitudes of final stations and ghcnd stations
+ncfile5=(['/share/cliprelabs/jh2423/smoothed_pamt_modes_station/data/dataforplot/',...
+'stationslatlon_',num2str(latestsy),num2str(earliestey),'.nc']);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+for startyear=latestsy %:1964 % startyear: latest start year
+    for endyear=earliestey %:-1:2014 % endyear: earliest end year
+        if startyear+(thelength-1) < endyear+(thelength-1)
+   
+     % read ghcnd stations measuring 'PRCP' and with start year <= startyear & end year >= endyear
+     [ghcndprcp, pnz, ghcnids, ghcnlats, ghcnlons, years ] = load_ghcnd_prcp(startyear, endyear,...
+         directory, prfolder,inventorypath, fnames);
+     save ([prfolder,'reo_ghcnddailydata_',...
+         num2str(startyear),num2str(endyear),'.mat'], ...
+         'ghcndprcp', 'pnz', 'ghcnids', 'ghcnlats', 'ghcnlons', ...
+         'years','-v7.3'); % save intermediate process data
+        load([prfolder,'reo_ghcnddailydata_',...
+         num2str(startyear),num2str(endyear),'.mat']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% quality control %%%%%%%%%%%%%%%%%%%%%%%%%%
 % apply a relatively strict completeness criterion: a year is classified 
@@ -82,14 +90,13 @@ missrate, period1, period2, years,ghcndprcp, ghcnids,ghcnlats,ghcnlons);
     [], qc_prcp, qcids, qclat, qclon, years, ghcnstationsfile);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-minglelist=minglelistpath;
-[theidnum]=numofsources(minglelist);
-jud=ismember(theidnum(:,1),finalids);
-final_sources=theidnum(jud,:);
+% minglelist=minglelistpath;
+% [theidnum]=numofsources(minglelist);
+% jud=ismember(theidnum(:,1),finalids);
+% final_sources=theidnum(jud,:);
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % save latitudes and longitudes of final stations and ghcnd stations
-ncfile5=('/share/cliprelabs/jh2423/P1/dataforplot/stationslatlon_19552024.nc');
 
 finallat=finallat(:); finallat=single(finallat);
 finallon=finallon(:); finallon=single(finallon);
@@ -113,7 +120,9 @@ ncwriteatt(ncfile5, '/', 'title', 'latitude and longitude of stations');
 [ncfile5]=nc_metadata(ncfile5);
 
 %% save daily precip series used in the study
-save(['/share/cliprelabs/jh2423/P1/data_process/ghcnd_pr/','thinner_dailypr_',num2str(missrate),'%miss_',num2str(period1(1)),num2str(period1(end)),'_',...
+% name of thinned daily precip series
+
+save([prfolder,'thinner_dailypr_',num2str(missrate),'%miss_',num2str(period1(1)),num2str(period1(end)),'_',...
     num2str(period2(1)),num2str(period2(end)),'.mat'],...
     'finalsta_prcp','finalids','finallat','finallon','years','qclat', 'qclon');
 
