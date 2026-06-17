@@ -6,14 +6,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear
 clc
+addpath('/share/cliprelabs/jh2423/smoothed_pamt_modes_station/functions/');
 thelength=30; % epoch length
 missrate=20; % set acceptable miss rate
 startyear=1955; % startyear: latest start year
-endyear=2024; % endyear: earliest end year
+endyear=2025; % endyear: earliest end year
 period1=startyear:(startyear+thelength-1); % early epoch
 period2=(endyear-thelength+1):endyear; % late epoch
-path='/share/cliprelabs/jh2423/P1/dataforplot/'; % the path saved data for plotting
-load(['/share/cliprelabs/jh2423/P1/data_process/ghcnd_pr/',...
+path='/share/cliprelabs/jh2423/smoothed_pamt_modes_station/data/dataforplot/'; % the path saved data for plotting
+load(['/share/cliprelabs/jh2423/smoothed_pamt_modes_station/data/ghcnd_pr/',...
     'thinner_dailypr_',num2str(missrate),'%miss_',num2str(period1(1)),num2str(period1(end)),'_',...
     num2str(period2(1)),num2str(period2(end)),'.mat']);
 
