@@ -8,7 +8,7 @@ function [ncfile1]=nc_metadata(ncfile1)
 ncwriteatt(ncfile1, '/', 'author',      'Jingya Han');
 ncwriteatt(ncfile1, '/', 'email',       'jh2423@cornell.edu');
 ncwriteatt(ncfile1, '/', 'institution', 'Cornell University');
-ncwriteatt(ncfile1, '/', 'reference',   'Han et al. (2026), Journal Name');
+ncwriteatt(ncfile1, '/', 'reference',   'Jingya Han & Angeline G. Pendergrass (2026), Climate models underestimate long-term changes in the precipitation intensity distribution compared to station observations');
 ncwriteatt(ncfile1, '/', 'history',     ['Created on ' datestr(now)]);
 
 end
