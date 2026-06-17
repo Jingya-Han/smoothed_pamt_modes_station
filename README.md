@@ -5,10 +5,11 @@ We acknowledge support for this work from NOAA’s Climate Program Office, Clima
 
 The repository contains the following folders:
 
-- **`data/`** — Input and processed datasets used in the analysis. Includes GHCN-D 
-  daily precipitation records (1955–2025), station latitude/longitude lookup tables, 
-  and intermediate/thinned data files used for plotting.
-
+- **`data/`** — Input and processed datasets used in the analysis. The subfolder **`dataforplot/`** — smoothed precipitation amount distributions and modes of change for the aggregation of stations and individual stations. The subfolder **`dly/`** — Raw daily station data files (likely in GHCN-D `.dly` format, the 
+  original fixed-width daily climate records before parsing). The subfolder **`ghcnd_pr/`** — Processed GHCN-D precipitation (PR) data, including station 
+  latitude and longitude and thinned/filtered precipitation datasets. The subfolder **`tas/`** — Temperature (TAS, "near-surface air temperature") data, processed 
+  separately from precipitation.
+  
 - **`functions/`** — Reusable MATLAB functions called by the analysis scripts.
 
 - **`scripts/`** — Main analysis pipeline scripts, run in order (e.g. `s00_process_ghcnd_update.m`, 
