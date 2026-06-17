@@ -5,4 +5,14 @@ We acknowledge support for this work from NOAA’s Climate Program Office, Clima
 
 The repository contains the following folders:
 
-'scripts/'
+- **`data/`** — Input and processed datasets used in the analysis. Includes GHCN-D 
+  daily precipitation records (1955–2025), station latitude/longitude lookup tables, 
+  and intermediate/thinned data files used for plotting.
+
+- **`functions/`** — Reusable MATLAB functions called by the analysis scripts.
+
+- **`scripts/`** — Main analysis pipeline scripts, run in order (e.g. `s00_process_ghcnd_update.m`, 
+  `s01_cal_modes_in_stations.m`), which process raw station data and calculate 
+  smoothed precipitation amount modes.
+
+- **`figures/`** — Output plots and visualizations generated from the analysis.
