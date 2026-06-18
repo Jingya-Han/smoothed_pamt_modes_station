@@ -5,15 +5,12 @@ We acknowledge support for this work from NOAA’s Climate Program Office, Clima
 
 The repository contains the following folders:
 
-- **`data/`** — Input and processed datasets used in the analysis. The subfolder **`dataforplot/`** — smoothed precipitation amount distributions and modes of change for the aggregation of stations and individual stations. The subfolder **`dly/`** — Raw daily station data files (likely in GHCN-D `.dly` format, the 
+- **`data/`** — Input and processed datasets used in the analysis. The subfolder **`dataforplot/`** — smoothed precipitation amount distributions and modes of change for the aggregation of stations (stations_20%miss_*.nc) and individual stations (stations_modes_spatial_dist_20%miss_*.nc). The subfolder **`dly/`** — Raw daily station data files (likely in GHCN-D `.dly` format, the 
   original fixed-width daily climate records before parsing). The subfolder **`ghcnd_pr/`** — Processed GHCN-D precipitation (PR) data, including station 
   latitude and longitude and thinned/filtered precipitation datasets. The subfolder **`tas/`** — Temperature (TAS, "near-surface air temperature") data, processed 
   separately from precipitation.
   
-- **`functions/`** — Reusable MATLAB functions called by the analysis scripts.
+- **`functions/`** — MATLAB functions called by the analysis scripts.
 
-- **`scripts/`** — Main analysis pipeline scripts, run in order (e.g. `s00_process_ghcnd_update.m`, 
-  `s01_cal_modes_in_stations.m`), which process raw station data and calculate 
-  smoothed precipitation amount modes.
 
-- **`figures/`** — Output plots and visualizations generated from the analysis.
+- **`figures/`** — Station network and changes in precipitation amount distribution aggregated across stations.
